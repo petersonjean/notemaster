@@ -7,30 +7,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="http://davidtkatz.com/public_css/noteMaster.css" />
     <script src="https://unpkg.com/vue"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
     <div id="app">
         <h3>{{title}}</h3>
-        <div class="form">
-            <div class="form-group">
-                <div class="form-group">
-                    <label >Note Title</label>
-                    <input type="text" class="form-control" v-model="note.title">
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-4">
+                                <div class="form">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label >Note Title</label>
+                                                <input type="text" class="form-control" v-model="note.title">
+                                            </div>
+                                            <div class="form-group">
+                                                    <label >Note Text</label>
+                                                    <input type="text" class="form-control" v-model="note.text">
+                                            </div>
+                                            <select v-model="note.color" class="form-control" single>
+                                                    <option value="#fa6e06">added</option>
+                                                    <option value="#425e6a">processing</option>
+                                                    <option value="#dcdcbb">done</option>
+                                                  </select>
+                                        </div>
+                                        <button class="btn btn-primary" @click="addNote()"> Submit</button>
+                                    </div>
+                        </div>
+                        <div class="col-md-4"> </div>
                 </div>
-                <div class="form-group">
-                        <label >Note Text</label>
-                        <input type="text" class="form-control" v-model="note.text">
-                </div>
-            </div>
-            <button class="btn btn-primary" @click="addNote"> Submit</button>
-        </div>
+              </div>
+       
         <div class="col-sm-12">
-            <div class="col-sm-4 note" v-for="note in notes">
-                <div class="card">
+            <div class="col-sm-4 note" v-for="(note, index) in notes">
+                <div class="card" v-bind:style="{'background-color': note.color}">
+                        
+                        <button type="button" class="close"  @click="removeNote(index)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <span @click="editNote(index)" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     <div class="card-block">
-                        <div class="card-title">{{note.title}}</div>
-                        <div class="card-title">{{note.date}}</div>
+                        <div class="card-title"><h4>{{note.title}}</h4></div>
+                        <div class="card-subtitle mb-2 text-muted">{{note.date}}</div>
                         <div class="card-text">{{note.text}}</div>
                     </div>
                 </div>
@@ -42,13 +61,16 @@
             el: '#app',
             data:{
                 title: 'Notemaster',
+                color:'',
                 note:{
                     title: '',
                     text:'',
+                    color:''
                 },
                 notes:[{
                     title: 'visited test',
                     text: 'it was an awesome trip visiting havard',
+                    color:'#dcdcbb',
                     date: new Date(Date.now()).toLocaleString()
                 }]
             }, 
@@ -56,14 +78,31 @@
                 getDate(){
                     new Date(Date.now()).toLocaleString()
                 },
+                saveNote(){
+                    if (typeof(Storage) !== "undefined") {
+                        localStorage.setItem('Note '+this.notes.length, JSON.stringify(this.notes[this.notes.length -1 ]))
+                         
+                    } else {
+                        alert("'Can't save in locale storage , browser not supported")
+                    }
+                }
+                ,
                 addNote(){
-                    let {text, title} = this.note
+                    let {text, title, color} = this.note
 
                     this.notes.push({
                         text,
                         title,
+                        color,
                         date: new Date(Date.now()).toLocaleString()
                         })
+                    
+                    //saving last saved notes
+                    this.saveNote();
+
+                },
+                removeNote(index){ 
+                    this.notes.splice(index,1)
                 }
             }
         })
