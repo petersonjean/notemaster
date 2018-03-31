@@ -74,6 +74,25 @@
                     date: new Date(Date.now()).toLocaleString()
                 }]
             }, 
+            created(){
+                const regex = /Note \d/g;
+                let m
+                for(var i =0; i < localStorage.length; i++){ 
+
+                    while ((m = regex.exec(localStorage.key(i))) !== null) {
+                        // This is necessary to avoid infinite loops with zero-width matches
+                        if (m.index === regex.lastIndex) {
+                            regex.lastIndex++;
+                        }
+                        
+                        // The result can be accessed through the `m`-variable.
+                        m.forEach((match, groupIndex) => {
+                           //console.log(`Found match, group ${groupIndex}: ${match}`);
+                           this.notes.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
+                        });
+                    } 
+                }
+            },
             methods:{
                 getDate(){
                     new Date(Date.now()).toLocaleString()
@@ -100,9 +119,15 @@
                     //saving last saved notes
                     this.saveNote();
 
+                    this.note= {title:" " , text:" ", color:" "}
+
                 },
                 removeNote(index){ 
                     this.notes.splice(index,1)
+                    localStorage.removeItem('Note '+ index)
+                },
+                editNote(index){
+                    //this.note
                 }
             }
         })
