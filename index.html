@@ -5,15 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>NoteMaster</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="http://davidtkatz.com/public_css/noteMaster.css" />
+   <!--<link rel="stylesheet" type="text/css" media="screen" href="http://davidtkatz.com/public_css/noteMaster.css" /> -->
     <script src="https://unpkg.com/vue"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     
 </head>
 <body>
     <div id="app">
-        <h3>{{title}}</h3>
+        <h3 class="center">{{title}}</h3>
         <div class="container-fluid">
                 <div class="row">
                         <div class="col-md-4"> </div>
@@ -40,21 +39,64 @@
                         <div class="col-md-4"> </div>
                 </div>
               </div>
-       
-        <div class="col-sm-12">
-            <div class="col-sm-4 note" v-for="(note, index) in notes">
-                <div class="card" v-bind:style="{'background-color': note.color}">
-                        
-                        <button type="button" class="close"  @click="removeNote(index)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <span @click="editNote(index)" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    <div class="card-block">
-                        <div class="card-title"><h4>{{note.title}}</h4></div>
-                        <div class="card-subtitle mb-2 text-muted">{{note.date}}</div>
-                        <div class="card-text">{{note.text}}</div>
+              <div class="container-fluid">
+                    <h3 class="center">My Notes</h3> 
+                    <div class="row filter">
+                        <div class="col-sm-12 col-md-8 filter-border">
+                                <span class="badge " style="background: #fa6e06">
+                                    Added 
+                                    <span class="badge badge-light center"> 
+                                                <span aria-hidden="true">&times;</span> 
+                                    </span>
+                                </span>
+                                <span class="badge " style="background: #425e6a">
+                                    Processing
+                                    <span class="badge badge-light center"> 
+                                            <span aria-hidden="true">&times;</span> 
+                                    </span>                                    
+                                </span>
+                                <span class="badge " style="background: #dcdcbb">
+                                    Done
+                                    <span class="badge badge-light center"> 
+                                            <span aria-hidden="true">&times;</span> 
+                                    </span>
+                                </span>
+                                
+                        </div>
+                        <div class="col-sm-12 col-md-4 filter-group">
+                                <button id="searchBtn" type="button" class="btn btn-secondary btn-search" > &#x1F50D;  <span class="label-icon" >Search</span></button>
+                        </div>
+                            
                     </div>
-                </div>
-            </div>
-        </div>
+                    <br class="divider" />
+                    <div class="row"> 
+                                <div class="col-sm-3 note" v-for="(note, index) in notes">                      
+                                    <div class="card"  v-bind:style="{'background-color': note.color, 'width': '18 rem'}">
+                                            <img class="card-img-top" v-bind:src="images[0]" alt="Card image cap"   >
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="row">
+                                                    <div class="col-sm-9">
+                                                            <h4>{{note.title}}</h4>
+                                                    </div>
+                                                    <div class="col-sm-1"> 
+                                                            <span @click="editNote(index)" class=" glyphicons glyphicons-pencil " aria-hidden="true">&#xE031</span> 
+                                                        </div>
+                                                    <div class="col-sm-1">
+                                                            <button type="button" class="close"  @click="removeNote(index)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+                                            <div class="card-text">{{note.text}}</div> 
+                                            <p class="card-text"><small class="text-muted">Last updated {{note.date}}</small></p>
+                                        </div>
+                                    </div>
+                                </div> 
+                    </div>
+
+                    
+              </div>
+       
     </div>
     <script>
         var app = new Vue({
@@ -62,17 +104,24 @@
             data:{
                 title: 'Notemaster',
                 color:'',
+                images:[
+                    "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=44fd85adc94d85353e27f5471352c087&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1454166155302-ef4863c27e70?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=680298e4f13a54b9a2b3063590f4d902&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=3a2416088253831803a2e9fdc1b71462&auto=format&fit=crop&w=500&q=60"
+                ],
                 note:{
                     title: '',
                     text:'',
-                    color:''
+                    color:'',
+                    date: ''
                 },
-                notes:[{
-                    title: 'visited test',
-                    text: 'it was an awesome trip visiting havard',
-                    color:'#dcdcbb',
-                    date: new Date(Date.now()).toLocaleString()
-                }]
+                notes:[//{
+                //     title: 'visited test',
+                //     text: 'it was an awesome trip visiting havard',
+                //     color:'#dcdcbb',
+                //     date: new Date(Date.now()).toLocaleString()
+                // }
+                ]
             }, 
             created(){
                 const regex = /Note \d/g;
@@ -97,9 +146,25 @@
                 getDate(){
                     new Date(Date.now()).toLocaleString()
                 },
-                saveNote(){
+                saveNote(count){
                     if (typeof(Storage) !== "undefined") {
-                        localStorage.setItem('Note '+this.notes.length, JSON.stringify(this.notes[this.notes.length -1 ]))
+                        if (count !== undefined) {
+                             for (let i = 1; i <= localStorage.length; i++) {
+                                 if (localStorage.key(i) === "Note "+count) {
+                                    //var b =JSON.parse(localStorage.getItem(localStorage.key(i))) 
+                                    localStorage.removeItem(localStorage.key(i))
+                                    localStorage.setItem('Note '+i, JSON.stringify(this.note))
+                                    console.log("execute")
+                                    console.lor(this.note)
+                                 }else{
+                                    console.log("tester")
+                                 }
+                                
+                             }
+                        } else {
+                            localStorage.setItem('Note '+(this.notes.length -1), JSON.stringify(this.notes[this.notes.length -1 ]))
+                        
+                        }
                          
                     } else {
                         alert("'Can't save in locale storage , browser not supported")
@@ -107,30 +172,87 @@
                 }
                 ,
                 addNote(){
-                    let {text, title, color} = this.note
+                    this.note.date = new Date(Date.now()).toLocaleString()
+                    //console.log(this.note.date)
+                    let {title,text, color, date} = this.note 
 
-                    this.notes.push({
-                        text,
-                        title,
-                        color,
-                        date: new Date(Date.now()).toLocaleString()
-                        })
+                    //searching for existing note
+                    for(var i =0; i < this.notes.length; i++){
+                        if (this.notes[i].title === title) {
+                            //alert("existing note found ")
+                            var count = i;
+                        } 
+                    }
+                    if (count !==  undefined) {
+                        //existing note
+                        this.notes.splice(count,1, this.note)
+                        this.saveNote(count)
+                    } else { 
+                        // no existing notes
+                            this.notes.push({
+                                title,    
+                                text, 
+                                color,
+                                date 
+                            })
+
+                            //saving last saved notes
+                            this.saveNote(count); 
+                    }
                     
-                    //saving last saved notes
-                    this.saveNote();
+                    
+                    
 
-                    this.note= {title:" " , text:" ", color:" "}
+                    this.note= {
+                        title:" " ,
+                        text:" ",
+                        color:" "
+                        }
 
                 },
                 removeNote(index){ 
                     this.notes.splice(index,1)
-                    localStorage.removeItem('Note '+ index)
+                    console.log(index)
+                    console.log(localStorage.key(index))
+                    localStorage.removeItem("Note "+index)
                 },
                 editNote(index){
-                    //this.note
+                    this.note= {
+                        title: this.notes[index].title,
+                        text: this.notes[index].text,
+                        color: this.notes[index].color,
+
+                    }
                 }
             }
         })
-    </script>
+
+        
+    </script> 
+    <style scoped>
+        body{ 
+        }
+             .center{
+                text-align: center
+             } 
+             .filter{
+                 
+                 margin: auto;
+                 padding: auto; 
+                 width: 30%;
+             }
+             .filter-border{
+                 border: 2px solid slateblue;
+                 
+             }
+             .filter-group{
+                 padding-left: 0px;
+             }
+    </style>
+    <!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ 
+<!-- Latest compiled and minified Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
